@@ -1,27 +1,43 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Locale;
+import java.math.BigInteger;
 import java.util.Scanner;
 
 public class Solution {
-    public String getReceipt() throws FileNotFoundException {
-        Scanner scanner = new Scanner(new FileInputStream("receipt.txt"));
-        double result = 0;
+    public BigInteger getMul() throws FileNotFoundException {
+        try (Scanner scanner = new Scanner(new FileInputStream("data.txt"))) {
+            int limit = Integer.parseInt(scanner.nextLine().trim());
+            String[] strings = scanner.nextLine().trim().split("\\s+");
 
-        while (scanner.hasNextLine()) {
-            String[] productInfo = scanner.nextLine().split(";");
-            result += Integer.parseInt(productInfo[1]) * Double.parseDouble(productInfo[2]);
+            int[] delimiters = new int[strings.length];
+
+            for (int i = 0; i < strings.length; i++) {
+                delimiters[i] = Integer.parseInt(strings[i]);
+            }
+
+            BigInteger mul = BigInteger.ONE;
+
+            for (int i = 1; i <= limit; i++) {
+                for (int delimiter : delimiters) {
+                    if (delimiter == 0) continue; // защита от деления на 0
+                    if (i % delimiter == 0) {
+                        mul = mul.multiply(BigInteger.valueOf(i));
+                        break;
+                    }
+                }
+            }
+
+            return mul;
         }
-
-        return String.format(Locale.US, "%.2f", result);
     }
 
+    // Метод main для проверки работы
     public static void main(String[] args) {
         try {
             Solution solution = new Solution();
-            System.out.println(solution.getReceipt());
-        } catch (java.io.FileNotFoundException e) {
-            System.out.println("Ошибка: файл receipt.txt не найден!");
+            System.out.println(solution.getMul());
+        } catch (FileNotFoundException e) {
+            System.out.println("Ошибка: файл data.txt не найден!");
         }
     }
 }
