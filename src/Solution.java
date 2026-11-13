@@ -1,43 +1,39 @@
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.math.BigInteger;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Solution {
-    public BigInteger getMul() throws FileNotFoundException {
-        try (Scanner scanner = new Scanner(new FileInputStream("data.txt"))) {
-            int limit = Integer.parseInt(scanner.nextLine().trim());
-            String[] strings = scanner.nextLine().trim().split("\\s+");
+    public void writeOrder() throws IOException {
+        Scanner scanner = new Scanner(new FileInputStream("numbers.txt"));
+        int index = 1;
+        String resString = "";
 
-            int[] delimiters = new int[strings.length];
-
-            for (int i = 0; i < strings.length; i++) {
-                delimiters[i] = Integer.parseInt(strings[i]);
+        while (scanner.hasNextLine()) {
+            String nowNumber = scanner.nextLine();
+            if (Integer.parseInt(nowNumber) == index) {
+                resString += nowNumber + " ";
             }
-
-            BigInteger mul = BigInteger.ONE;
-
-            for (int i = 1; i <= limit; i++) {
-                for (int delimiter : delimiters) {
-                    if (delimiter == 0) continue; // защита от деления на 0
-                    if (i % delimiter == 0) {
-                        mul = mul.multiply(BigInteger.valueOf(i));
-                        break;
-                    }
-                }
-            }
-
-            return mul;
+            index++;
         }
+
+        if (resString.equals("")) {
+            resString = "0";
+        }
+
+        FileWriter writer = new FileWriter("output.txt", false);
+        writer.write(resString.trim());
+        writer.flush();
     }
 
-    // Метод main для проверки работы
+    // Метод main для запуска проверки
     public static void main(String[] args) {
         try {
             Solution solution = new Solution();
-            System.out.println(solution.getMul());
-        } catch (FileNotFoundException e) {
-            System.out.println("Ошибка: файл data.txt не найден!");
+            solution.writeOrder();
+            System.out.println("Файл output.txt успешно создан!");
+        } catch (IOException e) {
+            System.out.println("Ошибка: " + e.getMessage());
         }
     }
 }
