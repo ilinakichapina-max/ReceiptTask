@@ -9,8 +9,8 @@ public class WeatherApp {
         // ВАШ КЛЮЧ (проверьте его в личном кабинете!)
         String apiKey = "56a75c60-b4ed-459e-bafe-6ae7000d6056";
 
-        double lat = 55.75;
-        double lon = 37.62;
+        double lat = 56.820134;
+        double lon = 35.833258;
         int limit = 7;
 
         String url = String.format("https://api.weather.yandex.ru/v2/forecast?lat=%s&lon=%s&limit=%d", lat, lon, limit);
